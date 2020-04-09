@@ -1,3 +1,6 @@
+# Lesson 2 - First Basic Calculator
+
+
 Kernel.puts("Please enter your first number:")
 number1 = Kernel.gets().chomp().to_i
 
