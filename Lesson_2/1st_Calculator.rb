@@ -1,24 +1,112 @@
 # Lesson 2 - First Basic Calculator
+def prompt(message)
+  Kernel.puts("=> #{message}")
+end
+
+def valid_number?(num)
+  num.to_i() != 0
+end
+
+def operation_to_message(string)
+  case string
+  when 'add'
+    return 'adding'
+  when 'subtract'
+    return 'subtracting'
+  when 'multiply'
+    return 'multiplying'
+  else
+    return 'dividing'
+  end
+end
+
+number1 = nil
+number2 = nil
+name = nil
+operation = nil
+
+prompt("Welcome to Calculator! Enter your name:")
+
+loop do
+  name = Kernel.gets().chomp()
+
+  if name.empty?()
+    prompt("Make sure to use a valid name.")
+  else
+    break
+  end
+end
+
+prompt("Hi #{name}!")
 
 
-Kernel.puts("Please enter your first number:")
-number1 = Kernel.gets().chomp().to_i
+loop do #main loop
 
-Kernel.puts("Please enter your second number:")
-number2 = Kernel.gets().chomp().to_i
+loop do #get your first number and validate it
+  prompt("Please enter your first number:")
+  number1 = Kernel.gets().chomp()
 
-Kernel.puts("Please enter the type of operation to perform.")
-Kernel.puts("Enter add, subtract, multiply or divide:")
+  if valid_number?(number1)
+      break
+  else
+      prompt("Hmm... that doesn't look like a valid number")
+  end
+end
 
+loop do #get your second number and validate it
+  prompt("Please enter your second number:")
+  number2 = Kernel.gets().chomp()
+
+  if valid_number?(number2)
+    break
+  else
+    prompt("Hmm... that doesn't look like a valid number")
+  end
+end
+
+operator_prompt = <<-MSG #Mesage to display when asking operator choice
+Please enter the type of operation to perform.
+- Add (enter 'add')
+- Subtract (enter 'subtract')
+- Multiply (enter 'multiply')
+- Divide (enter 'divide')
+MSG
+
+
+prompt(operator_prompt)
+
+loop do #Collects operator and validates input
 operation = Kernel.gets().chomp().downcase
 
-case operation
-when 'add'
-  Kernel.puts("#{number1} + #{number2} = #{number1 + number2}")
-when 'subtract'
-  Kernel.puts("#{number1} - #{number2} = #{number1 - number2}")
-when 'multiply'
-  Kernel.puts("#{number1} * #{number2} = #{number1 * number2}")
+if %w(add subtract multiply divide).include?(operation)
+  break
 else
-  Kernel.puts("#{number1} / #{number2} = #{number1.to_f / number2.to_f}")
+  prompt("Please choose add, subtract, multiply or divide")
 end
+
+end
+
+prompt("#{operation_to_message(operation)} the two numbers...")
+
+case operation #calulcates result
+when 'add'
+  result = number1.to_i() + number2.to_i()
+when 'subtract'
+  result = number1.to_i() - number2.to_i()
+when 'multiply'
+  result = number1.to_i() * number2.to_i()
+else
+  result = number1.to_f() / number2.to_f()
+end
+
+prompt("The result is #{result}") #outputs result
+
+prompt("Do you want to calculate again? (Enter Y to calculate again):")
+
+answer = Kernel.gets().chomp()
+
+break unless answer.downcase().start_with?('y')
+
+end
+
+puts "Powering off calculator...."
