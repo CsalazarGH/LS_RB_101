@@ -10,13 +10,13 @@ end
 def operation_to_message(string)
   case string
   when 'add'
-    return 'adding'
+    'adding'
   when 'subtract'
-    return 'subtracting'
+    'subtracting'
   when 'multiply'
-    return 'multiplying'
+    'multiplying'
   else
-    return 'dividing'
+    'dividing'
   end
 end
 
@@ -39,74 +39,69 @@ end
 
 prompt("Hi #{name}!")
 
+loop do # main loop
+  loop do # get your first number and validate it
+    prompt("Please enter your first number:")
+    number1 = Kernel.gets().chomp()
 
-loop do #main loop
-
-loop do #get your first number and validate it
-  prompt("Please enter your first number:")
-  number1 = Kernel.gets().chomp()
-
-  if valid_number?(number1)
+    if valid_number?(number1)
       break
-  else
+    else
       prompt("Hmm... that doesn't look like a valid number")
+    end
   end
-end
 
-loop do #get your second number and validate it
-  prompt("Please enter your second number:")
-  number2 = Kernel.gets().chomp()
+  loop do # get your second number and validate it
+    prompt("Please enter your second number:")
+    number2 = Kernel.gets().chomp()
 
-  if valid_number?(number2)
-    break
-  else
-    prompt("Hmm... that doesn't look like a valid number")
+    if valid_number?(number2)
+      break
+    else
+      prompt("Hmm... that doesn't look like a valid number")
+    end
   end
-end
 
-operator_prompt = <<-MSG #Mesage to display when asking operator choice
-Please enter the type of operation to perform.
-- Add (enter 'add')
-- Subtract (enter 'subtract')
-- Multiply (enter 'multiply')
-- Divide (enter 'divide')
-MSG
+  operator_prompt = <<-MSG # Mesage to display when asking operator choice
+    Please enter the type of operation to perform.
+    - Add (enter 'add')
+    - Subtract (enter 'subtract')
+    - Multiply (enter 'multiply')
+    - Divide (enter 'divide')
+    MSG
 
+  prompt(operator_prompt)
 
-prompt(operator_prompt)
+  loop do # Collects operator and validates input
+    operation = Kernel.gets().chomp().downcase
 
-loop do #Collects operator and validates input
-operation = Kernel.gets().chomp().downcase
+    if %w(add subtract multiply divide).include?(operation)
+      break
+    else
+      prompt("Please choose add, subtract, multiply or divide")
+    end
+  end
 
-if %w(add subtract multiply divide).include?(operation)
-  break
-else
-  prompt("Please choose add, subtract, multiply or divide")
-end
+  prompt("#{operation_to_message(operation)} the two numbers...")
 
-end
+  result =  case operation # calulcates result
+            when 'add'
+              number1.to_i() + number2.to_i()
+            when 'subtract'
+              number1.to_i() - number2.to_i()
+            when 'multiply'
+              number1.to_i() * number2.to_i()
+            else
+              number1.to_f() / number2.to_f()
+            end
 
-prompt("#{operation_to_message(operation)} the two numbers...")
+  prompt("The result is #{result}") # outputs result
 
-case operation #calulcates result
-when 'add'
-  result = number1.to_i() + number2.to_i()
-when 'subtract'
-  result = number1.to_i() - number2.to_i()
-when 'multiply'
-  result = number1.to_i() * number2.to_i()
-else
-  result = number1.to_f() / number2.to_f()
-end
+  prompt("Do you want to calculate again? (Enter Y to calculate again):")
 
-prompt("The result is #{result}") #outputs result
+  answer = Kernel.gets().chomp()
 
-prompt("Do you want to calculate again? (Enter Y to calculate again):")
-
-answer = Kernel.gets().chomp()
-
-break unless answer.downcase().start_with?('y')
-
+  break unless answer.downcase().start_with?('y')
 end
 
 puts "Powering off calculator...."
