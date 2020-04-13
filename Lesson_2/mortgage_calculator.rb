@@ -16,7 +16,7 @@ def valid_apr(str)
 end
 
 def valid_duration(str)
-  !str.empty? && (str.match(/[A-Za-z]/) ? true : false) == false && str.to_i > 0 && str.to_i == str.to_fs 
+  !str.empty? && (str.match(/[A-Za-z]/) ? true : false) == false && str.to_i > 0 && str.to_i == str.to_f 
 end
 
 def valid_inp?(str)
