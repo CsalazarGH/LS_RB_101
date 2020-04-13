@@ -3,20 +3,26 @@
 require 'yaml'
 MESSAGES = YAML.load_file('mortg_calculator.yml')
 
+def valid_chars?(string)
+  valid_chars = ['1','2','3','4','5','6','7','8','9','0','.']
+  string_array = string.split('') #returns array ['1', '2', '3', '5']
+  string_array.all? { |char| valid_chars.include?(char) }
+end
+
 def prompt(string) # adds => to string
   Kernel.puts('=> ' + string)
 end
 
 def valid_amount?(str) # Validates inputs
-  !str.empty? && str.to_f > 0 && (str.match(/[A-Za-z]/) ? true : false) == false
+  !str.empty? && valid_chars?(str) && str.to_f > 0
 end
 
-def valid_apr(str)
-  !str.empty? && (str.match(/[A-Za-z]/) ? true : false) == false && str.to_f.between?(0, 99)
+def valid_apr?(str)
+  !str.empty? && valid_chars?(str) && str.to_f.between?(0, 99)
 end
 
-def valid_duration(str)
-  !str.empty? && (str.match(/[A-Za-z]/) ? true : false) == false && str.to_i > 0 && str.to_i == str.to_f 
+def valid_duration?(str)
+  !str.empty? && valid_chars?(str) && str.to_i == str.to_f && str.to_i > 0 
 end
 
 def valid_inp?(str)
@@ -41,7 +47,7 @@ loop do # main loop
   loop do # collect apr and validate input
     prompt(MESSAGES['apr_input'])
     apr = gets.chomp()
-    break if valid_apr(apr)
+    break if valid_apr?(apr)
     prompt(MESSAGES['not_valid_input'])
   end
 
@@ -50,7 +56,7 @@ loop do # main loop
   loop do # collect duration of years
     prompt(MESSAGES['duration_input'])
     duration = gets.chomp()
-    break if valid_duration(duration)
+    break if valid_duration?(duration)
     prompt(MESSAGES['not_valid_input'])
   end
 
