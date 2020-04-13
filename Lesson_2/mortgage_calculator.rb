@@ -22,10 +22,10 @@ def valid_apr?(str)
 end
 
 def valid_duration?(str)
-  !str.empty? && valid_chars?(str) && str.to_i == str.to_f && str.to_i > 0 
+  !str.empty? && valid_chars?(str) && str.to_i == str.to_f && str.to_i > 0
 end
 
-def valid_inp?(str)
+def valid_again_inp?(str)
   str == 'y' || str == 'n'
 end
 
@@ -85,7 +85,7 @@ loop do # main loop
   loop do
     prompt(MESSAGES['calc_again']) # ask if they would like to calculate again
     input = gets.chomp().downcase()
-    break if valid_inp?(input)
+    break if valid_again_inp?(input)
     prompt(MESSAGES['calc_again_error'])
   end
 
