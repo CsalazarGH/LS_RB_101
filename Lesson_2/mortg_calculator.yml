@@ -6,5 +6,6 @@ apr_input: "What is the APR? (Annual Percentage Rate?)"
 duration_input: "Lastly, whats the duration of the loan in years?"
 calculating: "Calculating........"
 result_message: "Your monthly payment would be $#{monthly_payment.round(2)} for #{months_duration.to_s} months."
-calc_again: "Would you like to calculate again? (Y or N)"
+calc_again: "Would you like to calculate again? (N to power off)"
+calc_again_error: Invalid input, please enter Y or N.'
 powering_off: "Powering off mortage calculator...."
