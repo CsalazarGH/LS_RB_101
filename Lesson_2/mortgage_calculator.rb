@@ -1,95 +1,98 @@
-# Car Loan Calculator
-
 require 'yaml'
 MESSAGES = YAML.load_file('mortg_calculator.yml')
-
-def valid_chars?(string)
-  valid_chars = ['1','2','3','4','5','6','7','8','9','0','.']
-  string_array = string.split('') #returns array ['1', '2', '3', '5']
-  string_array.all? { |char| valid_chars.include?(char) }
-end
 
 def prompt(string) # adds => to string
   Kernel.puts('=> ' + string)
 end
 
-def valid_amount?(str) # Validates inputs
+def valid_chars?(string) # makes sure input doesn't have letters, etc.
+  valid_chars = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '.']
+  string_array = string.split('') # returns array ['1', '2', '3', '5']
+  string_array.all? { |char| valid_chars.include?(char) }
+end
+
+def valid_amount?(str) # Validates input for loan amount
   !str.empty? && valid_chars?(str) && str.to_f > 0
 end
 
-def valid_apr?(str)
+def valid_apr?(str) # validates input for APR
   !str.empty? && valid_chars?(str) && str.to_f.between?(0, 99)
 end
 
-def valid_duration?(str)
+def valid_duration?(str) # Validates input for valid_duration
   !str.empty? && valid_chars?(str) && str.to_i == str.to_f && str.to_i > 0
 end
 
-def valid_again_inp?(str)
-  str == 'y' || str == 'n'
+def collect_input(input_type) # Collects input for all 3
+  input = nil
+  loop do
+    prompt(MESSAGES[input_type])
+    input = gets.chomp
+    break if valid_in?(input, input_type)
+    prompt(MESSAGES['not_valid_input'])
+  end
+  input
 end
 
-prompt(MESSAGES['welcome_part1'])
-prompt(MESSAGES['welcome_part2'])
-
-loop do # main loop
-  loan_amount = nil
-
-  loop do # collect loan amount and validate input
-    prompt(MESSAGES['loan_amount_input'])
-    loan_amount = gets.chomp()
-    break if valid_amount?(loan_amount)
-    prompt(MESSAGES['not_valid_input'])
+def valid_in?(input, input_type) # Validates data depending on type
+  case input_type
+  when "loan_amount_input"
+    valid_amount?(input)
+  when "apr_input"
+    valid_apr?(input)
+  else
+    valid_duration?(input)
   end
+end
 
-  apr = nil
+def months(years) # Converts years to months
+  years * 12
+end
 
-  loop do # collect apr and validate input
-    prompt(MESSAGES['apr_input'])
-    apr = gets.chomp()
-    break if valid_apr?(apr)
-    prompt(MESSAGES['not_valid_input'])
-  end
+def calc_payment(amount, rate, mnths) # Calculates payment if int > 0
+  result = amount * (rate / (1 - (1 + rate)**(-mnths)))
+  result.round(2)
+end
 
-  duration = nil
+def calc_payment_no_int(amount, mnths) # Calculates payment if int == 0
+  result = amount / mnths
+  result.round(2)
+end
 
-  loop do # collect duration of years
-    prompt(MESSAGES['duration_input'])
-    duration = gets.chomp()
-    break if valid_duration?(duration)
-    prompt(MESSAGES['not_valid_input'])
-  end
+def valid_again_input?(string) # Validats input
+  string.downcase == 'y' || string.downcase == 'n'
+end
 
-  loan_amount_float = loan_amount.to_f() # convert loan amount to a float
-  month_interest_rate = apr.to_f() / 12 / 100 # convert to monthly interest rate
-  months_duration = duration.to_i() * 12 # convert year to months
+loop do # Main Loop
+  la = collect_input('loan_amount_input').to_f() # Loan Amount
+  month_apr = (collect_input('apr_input').to_f() / 100) / 12 # Monthly APR
+  years = collect_input('duration_input').to_f() #  Years
+  months = months(years) # Months of loan
 
-  # calculate the monthly mortgage payment
-  monthly_payment = if apr.to_f == 0
-                      loan_amount_float / months_duration
-                    else
-                      loan_amount_float * (month_interest_rate /
-                      (1 - (1 + month_interest_rate)**(-months_duration)))
-                    end
+  payment = if month_apr == 0.0 # Calculates payment for 0 interest
+              calc_payment_no_int(la, months)
+            else # Calculates payment with greater than 0 interest
+              calc_payment(la, month_apr, months)
+            end
 
-  result_message = <<-MSG
-  Your monthly payment would be
-     $#{monthly_payment.round(2)} for #{months_duration.round()} months."
+  result_message = <<-MSG # Message to display with result
+  Your monthly payment would be $#{payment}
+     for #{months.round()} months.
   MSG
 
-  prompt(MESSAGES['calculating'])
+  prompt(MESSAGES['calculating']) # Displays "Calculating...."
   prompt(result_message)
 
-  input = nil
+  answer = nil
 
   loop do
-    prompt(MESSAGES['calc_again']) # ask if they would like to calculate again
-    input = gets.chomp().downcase()
-    break if valid_again_inp?(input)
+    prompt(MESSAGES['calc_again'])
+    answer = gets.chomp()
+    break if valid_again_input?(answer)
     prompt(MESSAGES['calc_again_error'])
   end
 
-  if input == 'y'
+  if answer == 'y'
     system('clear') || system('cls')
   else
     prompt(MESSAGES['powering_off'])
