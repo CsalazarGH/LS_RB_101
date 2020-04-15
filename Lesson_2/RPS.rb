@@ -56,22 +56,10 @@ def pchoice_valid?(string)
   CHOICES.include?(string.downcase)
 end
 
-def decide_winner(pchoice, bchoice)
-  if pchoice == bchoice then return 'tie' end
-  case pchoice
-  when 'rock'
-    if bchoice == 'paper' then return 'bot'
-    elsif bchoice == 'scissors' then return 'player'
-    end
-  when 'paper'
-    if bchoice == 'rock' then return 'player'
-    elsif bchoice == 'scissors' then return 'bot'
-    end
-  when 'scissors'
-    if bchoice == 'rock' then return 'bot'
-    elsif bchoice == 'paper' then return 'player'
-    end
-  end
+def win?(first, second)
+  (first == 'rock' && second == 'scissors') ||
+    (first == 'paper' && second == 'rock') ||
+    (first == 'scissors' && second == 'paper')
 end
 
 def play_again?
@@ -85,10 +73,10 @@ def play_again?
   answer
 end
 
-def display_message(bot_or_player, comp_choice, user_choice)
-  if bot_or_player == 'bot'
+def display_message(comp_choice, user_choice)
+  if win?(comp_choice, user_choice)
     prompt("Bot Won! Bot chose #{comp_choice}, you chose #{user_choice}.")
-  elsif bot_or_player == 'player'
+  elsif win?(user_choice, comp_choice)
     prompt("You Won! You chose #{user_choice}, bot chose #{comp_choice}.")
   else
     prompt("You both chose #{user_choice}, it was a tie!")
@@ -96,7 +84,9 @@ def display_message(bot_or_player, comp_choice, user_choice)
 end
 
 welcome_to_game # Welcomes player to game
+
 ready_or_not = know_to_play? # Asks player if they know how to play
+
 get_ready_to_play(ready_or_not) # Puts instructions or lets play
 
 loop do
@@ -104,9 +94,7 @@ loop do
 
   player_choice = collect_player_choice # Collects player choice
 
-  winner = decide_winner(player_choice, bot_choice) # Assigns winner
-
-  display_message(winner, bot_choice, player_choice) # Displays winner message
+  display_message(bot_choice, player_choice) # Displays winner message
 
   play_again_choice = play_again? # asks to play again, validates input
 
