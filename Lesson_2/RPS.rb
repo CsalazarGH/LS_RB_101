@@ -42,7 +42,7 @@ def computers_choice(array)
 end
 
 def collect_player_choice
-  answer =nil
+  answer = nil
   loop do
     prompt('Enter rock, paper or scissors')
     answer = gets.chomp
@@ -57,30 +57,19 @@ def pchoice_valid?(string)
 end
 
 def decide_winner(pchoice, bchoice)
+  if pchoice == bchoice then return 'tie' end
   case pchoice
   when 'rock'
-    if bchoice == 'rock'
-      prompt('You both chose the same thing!')
-    elsif bchoice == 'paper'
-      prompt('Bot won! It chose paper')
-    else
-      prompt('You won! Bot chose scissors.')
+    if bchoice == 'paper' then return 'bot'
+    elsif bchoice == 'scissors' then return 'player'
     end
   when 'paper'
-    if bchoice == 'rock'
-      prompt('You won! Bot chose rock!')
-    elsif bchoice == 'paper'
-      prompt('You both chose the same thing!')
-    else
-      prompt('You lost! Bot chose scissors!')
+    if bchoice == 'rock' then return 'player'
+    elsif bchoice == 'scissors' then return 'bot'
     end
   when 'scissors'
-    if bchoice == 'rock'
-      prompt('You lost! Bot chose rock.')
-    elsif bchoice == 'paper'
-      prompt('You won! Bot chose paper.')
-    else
-      prompt('You both chose scissors! Play again.')
+    if bchoice == 'rock' then return 'bot'
+    elsif bchoice == 'paper' then return 'player'
     end
   end
 end
@@ -96,17 +85,32 @@ def play_again?
   answer
 end
 
+def display_message(bot_or_player, comp_choice, user_choice)
+  if bot_or_player == 'bot'
+    prompt("Bot Won! Bot chose #{comp_choice}, you chose #{user_choice}.")
+  elsif bot_or_player == 'player'
+    prompt("You Won! You chose #{user_choice}, bot chose #{comp_choice}.")
+  else
+    prompt("You both chose #{user_choice}, it was a tie!")
+  end
+end
+
 welcome_to_game # Welcomes player to game
 ready_or_not = know_to_play? # Asks player if they know how to play
 get_ready_to_play(ready_or_not) # Puts instructions or lets play
 
 loop do
   bot_choice = computers_choice(CHOICES) # Chooses random bot choice
-  player_choice = collect_player_choice # Collects player choice
-  decide_winner(player_choice, bot_choice)
-  play_again_choice = play_again?
 
-  if play_again_choice == 'n'
+  player_choice = collect_player_choice # Collects player choice
+
+  winner = decide_winner(player_choice, bot_choice) # Assigns winner
+
+  display_message(winner, bot_choice, player_choice) # Displays winner message
+
+  play_again_choice = play_again? # asks to play again, validates input
+
+  if play_again_choice == 'n' # Either breaks loop or clears screen for game
     prompt("Have a good day! It was fun playing!")
     break
   else
