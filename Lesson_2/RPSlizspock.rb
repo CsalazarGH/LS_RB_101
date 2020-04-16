@@ -3,6 +3,11 @@ system('clear') || system('cls') # Clears screen before starting game
 
 CHOICE_OPTIONS = ['rock', 'paper', 'scissors', 'lizard', 'spock']
 CHOICE_OPT_ABV = ['r', 'p', 's', 'l', 'sp']
+WINNING_SCENARIOS = { 'rock' => ['scissors', 'lizard'],
+                      'paper' => ['rock', 'spock'],
+                      'scissors' => ['lizard', 'paper'],
+                      'lizard' => ['paper', 'spock'],
+                      'spock' => ['rock', 'scissors'] }
 
 def prompt(message) # Displays message with =>
   Kernel.puts("=> #{message}")
@@ -40,16 +45,7 @@ def generate_bot_choice # Generates random bot choice
 end
 
 def win?(first, second) # Returns true if first argument beats second argument
-  (first == 'rock' && second == 'scissors') ||
-    (first == 'spock' && second == 'rock') ||
-    (first == 'paper' && second == 'spock') ||
-    (first == 'lizard' && second == 'paper') ||
-    (first == 'scissors' && second == 'lizard') ||
-    (first == 'spock' && second == 'scissors') ||
-    (first == 'lizard' && second == 'spock') ||
-    (first == 'rock' && second == 'lizard') ||
-    (first == 'paper' && second == 'rock') ||
-    (first == 'scissors' && second == 'paper')
+  WINNING_SCENARIOS[first].include?(second)
 end
 
 player_score = 0
