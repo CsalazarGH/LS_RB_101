@@ -8,5 +8,3 @@ flintstones = { "Fred" => 0,
                 "Pebbles" => 5 }
 
 array = flintstones.assoc("Barney")
-
-p array
