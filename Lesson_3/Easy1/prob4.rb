@@ -3,4 +3,8 @@
 
 numbers = [1, 2, 3, 4, 5]
 
-p numbers.delete(1)
+numbers.delete_at(1)
+# this takes the index of the element you wish to delete.
+
+numbers.delete(1)
+# this takes the value of the element you wish to delete
