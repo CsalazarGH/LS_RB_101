@@ -26,3 +26,5 @@ string as the argument or even with no argument.
 When you pass `"yes"` as the argument to the `bar` method, it will evaluate a
 boolean `param == "no" ?`. Since param will be equal to "yes", it will evaluate
 to `false` and return `"no"`.
+
+done
