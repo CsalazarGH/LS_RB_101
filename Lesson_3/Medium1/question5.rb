@@ -1,7 +1,7 @@
 
-def fib(first_num, second_num)
-limit = 15
-  while first_num + second_num < limit
+def fib(first_num, second_num, lim)
+limit = lim
+  while first_num + second_num < lim
     sum = first_num + second_num
     first_num = second_num
     second_num = sum
@@ -9,5 +9,5 @@ limit = 15
   sum
 end
 
-result = fib(0, 1)
+result = fib(0, 1, 15)
 puts "result is #{result}"
