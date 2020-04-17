@@ -20,4 +20,4 @@ flintstones.each do |name, value|
 end
 
 p array
-# => 
+# => ["Barney", 2]
