@@ -7,17 +7,6 @@ flintstones = { "Fred" => 0,
                 "BamBam" => 4,
                 "Pebbles" => 5 }
 
-array = []
-
-flintstones.delete_if {|name, value| name != 'Barney'}
-
-p flintstones
-# => {"Barney"=>2}
-
-flintstones.each do |name, value|
-  array.push(name)
-  array.push(value)
-end
+array = flintstones.assoc("Barney")
 
 p array
-# => ["Barney", 2]
