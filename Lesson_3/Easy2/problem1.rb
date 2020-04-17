@@ -2,6 +2,6 @@
 
 ages = { "Herman" => 32, "Lily" => 30, "Grandpa" => 402, "Eddie" => 10 }
 
-ages.include?('spot')
-ages.key?('spot')
-p ages.member?('spot')
+ages.include?('spot') #  => false
+ages.key?('spot') #  => false
+ages.member?('spot') #  => false
