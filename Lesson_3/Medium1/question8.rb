@@ -9,3 +9,7 @@ def rps(fist1, fist2)
 end
 
 puts rps(rps(rps("rock", "paper"), rps("rock", "scissors")), "rock")
+# => paper
+
+# The innermost expressions return "paper" and "rock" which would return "paper"
+# When used as arguments for the rps method.
