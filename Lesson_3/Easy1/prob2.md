@@ -1,3 +1,27 @@
+# Question 2
+
+1. What is `!=` and where should you use it?
+
+`!=` is a logical operator which means "not equal to".
+It should be used in conditional statements, like:
+
+```ruby
+if a != 3
+  # do something
+end
+
+# This expression will only be evaluated if `a` is different from 3.
+```
+
+
+
+
+
+
+
+
+
+
 1. What is `!=` and where should you use it?
 
 `!=` is a logical operator which means "not equal to."
