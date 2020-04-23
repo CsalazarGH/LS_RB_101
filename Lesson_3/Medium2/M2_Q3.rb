@@ -1,6 +1,6 @@
 def tricky_method(a_string_param, an_array_param)
-  a_string_param += "rutabaga"
-  an_array_param << "rutabaga"
+  a_string_param += "rutabaga" # points to a new varible
+  an_array_param << "rutabaga" # appends to existing variable "my_array"
 end
 
 my_string = "pumpkins"
