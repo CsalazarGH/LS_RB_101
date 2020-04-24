@@ -28,23 +28,25 @@ def sign(integer)
   end
 end
 
+def without_sign(integer)
+  if integer < 0
+    integer * -1
+  else 
+    integer
+  end
+end
+
 def signed_integer_to_string(signedinteger)
-  positive_or_negative = sign(signedinteger) # '+' , '-', 'none'
+  positive_or_negative = sign(signedinteger) # '+' 
 
-  integer_without_sign = if signedinteger < 0
-                            signedinteger * -1
-                         else 
-                            signedinteger
-                         end
-  integer_string = integer_to_string(integer_without_sign) #' 123'
-  p integer_string
+  integer_without_sign = without_sign(signedinteger) # 4231
 
-  final_string = case positive_or_negative
+  integer_string = integer_to_string(integer_without_sign) # '4321'
+
+  final_string = case positive_or_negative # '+4321'
                  when '+' then return '+' + integer_string
                  when '-' then return '-' + integer_string
                  else return integer_string
                  end
 end
-
-
 
