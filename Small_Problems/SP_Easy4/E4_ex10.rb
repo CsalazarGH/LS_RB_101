@@ -19,21 +19,14 @@ def integer_to_string(integer)
 end
 
 def sign(integer)
-  if integer > 0
-    return '+'
-  elsif integer < 0
-    return '-'
-  else
-    return 'none'
+  case integer <=> 0
+  when +1 then return '+'
+  when -1 then  return '-'
   end
 end
 
 def without_sign(integer)
-  if integer < 0
-    integer * -1
-  else 
-    integer
-  end
+  integer < 0 ? integer * -1 : integer
 end
 
 def signed_integer_to_string(signedinteger)
@@ -50,3 +43,6 @@ def signed_integer_to_string(signedinteger)
                  end
 end
 
+p signed_integer_to_string(4321) == '+4321'
+p signed_integer_to_string(-123) == '-123'
+p signed_integer_to_string(0) == '0'
