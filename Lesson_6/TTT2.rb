@@ -1,8 +1,6 @@
 INITAL_MARKER = ' '
 PLAYER_MAKER = 'X'
 COMPUTER_MARKER = 'O'
-
-
 XXX = 'XXX'
 OOO = 'OOO'
 
