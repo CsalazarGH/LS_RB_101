@@ -163,9 +163,9 @@ comp_wins = 0
 winner = ''
 
 loop do
-  current_player = first_player?
-  loop do
 
+  loop do
+    current_player = first_player?
     loop do
       display_board(board) if current_player == 'user'
       place_piece!(board, current_player) 
@@ -195,7 +195,7 @@ loop do
       board = initialize_board 
     end
 
-    break if [user_wins, comp_wins].include?(5)
+    break if winner != ''
   end
 
   case winner
