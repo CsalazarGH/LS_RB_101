@@ -1,4 +1,3 @@
-
 CARD_VALUES = [2,3,4,5,6,7,8,9,10,'J','Q','K','A']
 CARD_SUITES = ['H', 'D', 'S', 'C']
 
@@ -79,16 +78,18 @@ def and_commas(hand) # ["10 of Hearts", "Ace of Diamonds"]
   end
 end
 
-def display_players_hand(phand)
+def display_players_hand(phand, value)
   prompt("Your current hand is #{and_commas(phand)}.")
+  prompt("Your current value is: #{value} (Over 21 busts)")
 end
 
 def display_dealers_hand1(dhand)
   prompt("Dealers hand is #{dhand[0]} and an unkown card.")
 end
 
-def display_dealers_hand2(dhand)
+def display_dealers_hand2(dhand, value)
   prompt("Dealers current hand is #{and_commas(dhand)}")
+  prompt ("Dealer's current value is: #{value}")
 end
 
 def deal_card(dck, num = 1)
@@ -115,7 +116,7 @@ def play_again?
 end
 
 def see_next_dealt
-  prompt ("Dealer is going to hit, press go to see next card dealt!")
+  prompt ("Dealer is going to hit, type GO to see next card dealt!")
   ans = ''
   loop do 
     ans = gets.chomp.downcase
@@ -125,11 +126,16 @@ def see_next_dealt
   ans 
 end
 
-def decide_winner?(p_value, d_value)
+def round_winner?(p_value, d_value, score)
   case p_value <=> d_value
-  when +1 then prompt("Player Won!")
-  when -1 then prompt("Dealer Won!")
-  else prompt("It was a tie!")
+  when +1 
+    prompt("Player Won this round!!")
+    score[0] += 1
+  when -1 
+    prompt("Dealer Won this round!!")
+    score[1] += 1
+  else 
+    prompt("It was a tie!")
   end
 end
 
@@ -137,72 +143,117 @@ def bust?(value)
   value > 21 ? true : false
 end
 
+def won_5_rounds(score)
+  score == 5 ? true : false
+end
+
+def match_winner(score)
+  if score[1] == 5
+    prompt("Dealer WON THE MATCH! #{display_score(score)}")
+  else
+    prompt("Player WON THE MATCH!  #{display_score(score)}")
+  end
+end
+
+def next_round
+  prompt("Press any key to start the next round.")
+  ans = nil
+  loop do
+    ans = gets.chomp
+    break
+  end
+  ans
+end
+
+def display_score(score)
+  prompt("ScoreKeeper - Player: #{score[0]}, Dealer Score: #{score[1]}")
+end
+
+loop do
+  score = [0, 0]
 loop do
   system('clear') || system('cls')
   deck = initalize_deck(CARD_VALUES, CARD_SUITES) #Creates a new deck of cards
-  player_value = 0 , dealer_value = 0
+  player_value = 0 
+  dealer_value = 0
   player_hand, dealer_hand = deal_card(deck, 2)[0], deal_card(deck, 2)[1] # Initalizes dealer and players handss
-  player_bust = false , dealer_bust = false 
-  
+  player_bust = false  
+  dealer_bust = false 
+  display_score(score)
+  prompt('----------------------------------------------')
+
   loop do #player loop
-    display_dealers_hand1(convert_hand(dealer_hand)) #Displays dealers hand
-    display_players_hand(convert_hand(player_hand)) #Displays players hand
-    player_value = calculate_hand_value(player_hand) #Calculates value of hand and assigned is it player_value
+    player_value = calculate_hand_value(player_hand) 
+    display_dealers_hand1(convert_hand(dealer_hand)) 
+    display_players_hand(convert_hand(player_hand), player_value) 
     if player_value > 21
-      prompt("You went over 21! BUST! You loose!")
+      prompt("You went over 21! BUST! You lose this round!")
       player_bust = true
+      score[1] += 1
       break
     end
     hit_or_stay == 'h' ? (player_hand = player_hand + [deal_card(deck)]) : (break)
   end
+  
+  #Check if anybody won, if yes, BREAK LOOP
+  if won_5_rounds(score[1])
+    break
+  end
 
   if player_bust == true
-    if play_again? == 'y'
+    if next_round != nil
       player_value = 0 
       player_bust = false 
       next
-    else
-      break
     end
   end
+
   system('clear') || system('cls')
 
   loop do #Dealer ROUND
-    display_dealers_hand2(convert_hand(dealer_hand))
-    dealer_value = calculate_hand_value(dealer_hand)  
+    dealer_value = calculate_hand_value(dealer_hand) 
+    display_dealers_hand2(convert_hand(dealer_hand), dealer_value)
     if (dealer_value <= 21) && (dealer_value >= 17)
       prompt("Dealer decides to stay!")
       break
     end
     if dealer_value > 21
-      prompt("Dealer went over 21! BUST! Dealer loses!")
+      prompt("Dealer went over 21! BUST! Dealer loses! Player WINS!")
       dealer_bust = true
+      score[0] += 1
       break
     end
     dealer_hand = dealer_hand + [deal_card(deck)]
     see_next_dealt
   end
+
+  #Check if anybody won, break loop if TRUE
+  if won_5_rounds(score[0])
+    break
+  end
   
   if dealer_bust == true
-    if play_again? == 'y'
+    if next_round != nil
       player_value = 0 
       dealer_value = 0
       dealer_bust = false 
       next
-    else
-      break
     end
   end
 
-decide_winner?(player_value, dealer_value)
+  round_winner?(player_value, dealer_value, score)
 
-  if play_again? == 'y'
+  break if won_5_rounds(score[0]) || won_5_rounds(score[1])
+
+  if next_round != nil
     player_value = 0 
     dealer_value = 0
     next
-  else
-    break
   end
+
 end
-
-
+  prompt('----------------------------------------------')
+  match_winner(score)
+  score[0], score[1] = 0, 0
+  play_again? == 'y' ? next : break
+end
