@@ -21,7 +21,7 @@ def instructions
   prompt(INSTRUCTIONS1)
   prompt(LINE)
   prompt("Press any key for the next set of instructions")
-  1.times { ans = gets.chomp }
+  1.times { gets.chomp }
   system("clear") || system('cls')
   prompt(INSTRUCTIONS2)
   prompt(LINE)
@@ -184,19 +184,20 @@ def winner_or_tie(player_value, dealer_value)
 end
 
 def display_winner_n_score(scenario, player_value, dealer_value)
-  score = "Player Value: #{player_value} Dealer Value: #{dealer_value}"
+  score = "Player Value: #{player_value} - Dealer Value: #{dealer_value}"
   case scenario
   when 'player' || 'dealer'
-    prompt("#{scenario.capitalize} won this round!" + " #{score}")
+    prompt("#{scenario.capitalize} won this round! #{score}")
   else
-    prompt("It was a tie! Player Value: #{player_value} Dealer Value: #{dealer_value}")
+    prompt("It was a tie! #{score}")
   end
 end
 
 def display_round_winner(score)
+  score_board = ["Player Score: #{score[0]}", "Dealer Score: #{score[1]}"]
   case score[0]
-  when 5 then prompt("Player won this Match! Player Score: #{score[0]} - Dealer Score: #{score[1]}")
-  else prompt("Dealer won this Match! Dealer Score: #{score[1]} - Player Score: #{score[0]}")
+  when 5 then prompt("Player won this Match! #{score_board.join(' - ')}")
+  else prompt("Dealer won this Match! #{score_board.reverse.join(' - ')}")
   end
 end
 
