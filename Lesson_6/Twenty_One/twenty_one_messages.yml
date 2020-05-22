@@ -9,3 +9,6 @@ dealer_hit_message: "Dealer is going to hit, type GO to see next card dealt!"
 inv_enter_go: "Invalid input, enter GO"
 play_again: "Would you like to play again? Enter Y or N"
 dealer_stay: "Dealer is going to stay!"
+instructions_1: "The goal of each round is to have the highest valued hand.\n
+You will be dealt two cards, and can choose to hit or stay.\n
+If you hit, you will be dealt 1 card. If you stay, it goes to the dealers turn."

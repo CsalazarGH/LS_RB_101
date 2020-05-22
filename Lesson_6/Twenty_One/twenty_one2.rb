@@ -4,8 +4,28 @@ MESSAGES = YAML.load_file('twenty_one_messages.yml')
 CARD_VALUES = [2, 3, 4, 5, 6, 7, 8, 9, 10, 'J', 'Q', 'K', 'A']
 CARD_SUITES = ['H', 'D', 'S', 'C']
 BUST_VALUE = 21
-INSTRUCTIONS = 'INSTRUCTIONS'
 LINE = '-----------------------------------------------------'
+INSTRUCTIONS1 = <<-MSG
+The goal of each round is to have the highest valued hand.
+=> You will be dealt two cards, and can choose to hit or stay.
+=> If you hit, you will be dealt 1 card. If you stay, it goes to the dealers turn.
+MSG
+INSTRUCTIONS2 = <<-MSG
+If your hand value goes over 21, you bust and loose the round.
+=> Number Cards are worth their number. Jack, Queen, King are 10.
+=> Aces are 11 for the first ace. Every ace is worth 1 after.
+=> First player to win 5 rounds wins the match!
+MSG
+
+def instructions
+  prompt(INSTRUCTIONS1)
+  prompt(LINE)
+  prompt("Press any key for the next set of instructions")
+  1.times { ans = gets.chomp }
+  system("clear") || system('cls')
+  prompt(INSTRUCTIONS2)
+  prompt(LINE)
+end
 
 def display_score(score)
   prompt("SCOREBOARD - Player: #{score[0]} Dealer: #{score[1]}")
@@ -81,7 +101,7 @@ def need_instructions?
   end
   if ans == 'y'
     system('clear') || system('cls')
-    prompt(INSTRUCTIONS)
+    instructions
   end
 end
 
@@ -164,11 +184,10 @@ def winner_or_tie(player_value, dealer_value)
 end
 
 def display_winner_n_score(scenario, player_value, dealer_value)
+  score = "Player Value: #{player_value} Dealer Value: #{dealer_value}"
   case scenario
-  when 'player'
-    prompt("Player won this round! Player Value: #{player_value} Dealer Value: #{dealer_value}")
-  when 'dealer'
-    prompt("Dealer won this round! Player Value: #{player_value} Dealer Value: #{dealer_value}")
+  when 'player' || 'dealer'
+    prompt("#{scenario.capitalize} won this round!" + " #{score}")
   else
     prompt("It was a tie! Player Value: #{player_value} Dealer Value: #{dealer_value}")
   end
@@ -192,9 +211,18 @@ def play_again?
   ans
 end
 
+def round_winner_point(round_result, score_board)
+  if round_result == 'player'
+    score_board[0] += 1
+  elsif round_result == 'dealer'
+    score_board[1] += 1
+  end
+end
+
+round_counter = 1
+
 loop do # MAIN GAME LOOP
   system('clear') || system('cls')
-  round_counter = 1
   score_board = [0, 0] # PLAYER SCORE IS IDX 0, DEALER IS IDX[1]
   welcome_player
   need_instructions? if round_counter == 1
@@ -250,18 +278,11 @@ loop do # MAIN GAME LOOP
       break if score_board[0] == 5
       next if next_round
     end
+
     round_result = winner_or_tie(player_value, dealer_value)
-
-    if round_result == 'player'
-      score_board[0] += 1
-    elsif round_result == 'dealer'
-      score_board[1] += 1
-    end
-
+    round_winner_point(round_result, score_board)
     display_winner_n_score(round_result, player_value, dealer_value)
-
     break if score_board.include?(5)
-
     next_round
   end
   prompt(LINE)
