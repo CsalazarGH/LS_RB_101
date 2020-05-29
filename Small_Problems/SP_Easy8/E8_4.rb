@@ -1,33 +1,20 @@
 def substrings_at_start(string)
-  string_size = string.length
-  count = 0
-  array = []
+  array = Array.new
 
-  loop do
-    array << string[0..count]
-    count += 1
-    break if count == string_size
+  string.length.times do |num|
+    array << string[0..num]
   end
-
   array
 end
 
 def substrings(string)
-  count = 0
-  array = []
+  substrings = Array.new
 
- (string.length).times do 
-    array << string[count..-1]
-    count += 1
- end
-
-  array.map do |string| 
-    substrings_at_start(string)
-  end.flatten
-
+  string.size.times do |num|
+    substrings << substrings_at_start(string[num..-1])
+  end
+  substrings.flatten!
 end
-
-
 
 
 p substrings('abcde') == [
