@@ -7,15 +7,12 @@ Gregorian Calendar) and that it will remain in use for the foreseeable future.
 require 'date'
 
 def friday_13th(year)
-  unlucky_count = 0
-  thirteenth = Date.new(year, 1, 13)
-  12.times do
-    unlucky_count += 1 if thirteenth.friday?
-    thirteenth = thirteenth.next_month
+  count = 0
+
+  12.times do |num|
+    count += 1 if Date.new(year,num+1,13).friday?
   end
-  unlucky_count
+  count
 end
 
-friday_13th(2015) == 3
-friday_13th(1986) == 1
-friday_13th(2019) == 2
+p friday_13th(2019) 
